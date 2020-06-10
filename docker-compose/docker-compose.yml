@@ -1,0 +1,30 @@
+version: '3'
+services:
+  # Hazelcast cluster 1
+  hazelcast1:
+    image: hazelcast/hazelcast:latest
+    environment:
+      - 'JAVA_OPTS=-Dhazelcast.local.publicAddress=192.168.56.1:5701 -Dhazelcast.mancenter.url=http://mc:8090/mancenter -Dgroup.name=dev -Dgroup.password=Password1'
+    ports:
+      - '5701:5701'
+    links:
+      - 'management-center:mc'
+
+  # Hazelcast cluster 2
+  hazelcast2:
+    image: hazelcast/hazelcast:latest
+    environment:
+      - 'JAVA_OPTS=-Dhazelcast.local.publicAddress=192.168.56.1:5702 -Dhazelcast.mancenter.url=http://mc:8090/mancenter -Dgroup.name=dev -Dgroup.password=Password1'
+    ports:
+      - '5702:5701'
+    links:
+      - 'management-center:mc'
+
+  # Hazelcast Management Center
+  management-center:
+    image: hazelcast/management-center:latest
+    environment:
+      - MANCENTER_DATA=/hazalcast
+      - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
+    ports:
+      - '8090:8080'
