@@ -1,5 +1,11 @@
 # Hazelcast with Spring Boot + JPA + Hibernate
 
+## Prerequisites
+
+- Docker Desktop (which includes `docker` and `docker-compose`) is installed, up and running
+- JDK 1.8+ is installed
+
+
 ## Get Started
 
 ```sh
@@ -18,13 +24,16 @@ docker-compose -f docker-compose/_docker-compose.yml up
 
 ```
 ...
-hazelcast2_1         | Members {size:2, ver:2} [
-hazelcast2_1         | 	Member [192.168.56.1]:5701 - f0707a4b-3e92-47f3-9217-6eb71ec52aea
-hazelcast2_1         | 	Member [192.168.56.1]:5702 - 5a74f368-13e0-43ba-911f-50ec533bbd7c this
-hazelcast2_1         | ]
-hazelcast2_1         |
-hazelcast2_1         | Jun 10, 2020 7:08:06 AM com.hazelcast.core.LifecycleService
-hazelcast2_1         | INFO: [192.168.56.1]:5702 [dev] [4.0.1] [192.168.56.1]:5702 is STARTED
+management-center_1  | Hazelcast Management Center successfully started at http://localhost:8080/
+management-center_1  |
+hazelcast1_1         | Jun 10, 2020 9:20:06 AM com.hazelcast.internal.cluster.ClusterService
+hazelcast1_1         | INFO: [192.168.56.1]:5701 [dev] [4.0.1]
+hazelcast1_1         |
+hazelcast1_1         | Members {size:2, ver:2} [
+hazelcast1_1         | 	Member [192.168.56.1]:5701 - ccd75619-d3c9-4612-a95d-0aa51dd6770b this
+hazelcast1_1         | 	Member [192.168.56.1]:5702 - f2603d08-a963-479c-b9d7-8b5cb7e6d2a0
+hazelcast1_1         | ]
+...
 ```
 
 
@@ -64,11 +73,11 @@ Open another console:
 ```sh
 # Generate two employee records
 # Each time you could see SQL statements printed out in app's logs
-curl http://localhost:8080/api/v1/employee/create
-curl http://localhost:8080/api/v1/employee/create
+curl -s http://localhost:8080/api/v1/employee/create
+curl -s http://localhost:8080/api/v1/employee/create
 
 # List all employee records
-curl http://localhost:8080/api/v1/employee/find/all
+curl -s http://localhost:8080/api/v1/employee/find/all | jq '.'
 
 # Check the record
 emp_id=$(curl -s http://localhost:8080/api/v1/employee/find/all | jq -r '.[0].empId')
